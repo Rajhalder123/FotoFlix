@@ -65,6 +65,15 @@ function App() {
   useEffect(() => {
     fetchImages();
   }, [page, fetchImages]);
+  useEffect(() => {
+  const storedFavorites = JSON.parse(localStorage.getItem("favoritePhotos"));
+  if (storedFavorites) setFavoritePhotos(storedFavorites);
+}, []);
+
+useEffect(() => {
+  localStorage.setItem("favoritePhotos", JSON.stringify(favoritePhotos));
+}, [favoritePhotos]);
+
 
   // Infinite scroll event listener
   useEffect(() => {
@@ -96,14 +105,14 @@ function App() {
   };
 
   return (
-    <Router>
+    <Router basename="/FotoFlix">
       <div>
         <nav className="navbar">
-          <div className="navbar__logo">Fotoflix</div>
+          <div className="navbar__logo-1">Fotoflix</div>
           <form className="navbar__search-form" onSubmit={handleSubmit}>
             <input
               type="text"
-              placeholder="search"
+              placeholder="Type to search photos"
               className="form-input"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -112,7 +121,8 @@ function App() {
               <FaSearch />
             </button>
           </form>
-          <div className="navbar__links">
+          <div className="navbar__links fav">
+           
             <Link to="/favourites">Favourites</Link>
           </div>
         </nav>
@@ -155,6 +165,7 @@ function App() {
           />
         </Routes>
       </div>
+      
     </Router>
   );
 }
